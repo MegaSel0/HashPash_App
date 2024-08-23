@@ -21,6 +21,7 @@ ApplicationWindow {
 
     HashPage{
         id:hoemPage
+
     }
 }
 

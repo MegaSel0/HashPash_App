@@ -24,7 +24,7 @@ Item {
             horizontalCenter: parent.horizontalCenter
             topMargin: 15
         }
-        placeholderText: qsTr("Encrypted Message") // تغییر نام به Encrypted Message
+        placeholderText: qsTr("Encrypted Message")
     }
 
     TextArea {
@@ -38,7 +38,7 @@ Item {
             topMargin: 30
         }
         wrapMode: TextEdit.Wrap
-        placeholderText: qsTr("Decrypted Message") // تغییر نام به Decrypted Message
+        placeholderText: qsTr("Decrypted Message")
     }
 
     Button {
@@ -52,6 +52,10 @@ Item {
         onClicked: {
             var decryptedMessage = SignVerify.decryptMessage(hashCode.text, privateKey.text);
             messages.text = decryptedMessage;
+
+            // ذخیره‌سازی اطلاعات دی‌هش در پایگاه داده
+            sqliteDb.insertDecryptionData(privateKey.text, decryptedMessage, hashCode.text);
         }
     }
+
 }

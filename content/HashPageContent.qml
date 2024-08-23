@@ -38,10 +38,12 @@ Item {
             topMargin: 15
         }
         onClicked: {
-                   hashOutput.text = SignVerify.encryptMessage(messages.text, publicKey.text)
-               }
-
+            var hash = SignVerify.encryptMessage(messages.text, publicKey.text)
+            hashOutput.text = hash
+            sqliteDb.insertData(publicKey.text, messages.text, hash)
+        }
     }
+
 
 
 

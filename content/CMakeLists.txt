@@ -15,6 +15,10 @@ qt6_add_qml_module(content
     RESOURCES
         fonts/fonts.txt
         images/history.svg
+        images//lock.svg
+        images/lock-open.svg
         QML_FILES HashPageContent.qml
         QML_FILES PashPageContent.qml
+        QML_FILES HistoryDialog.qml
+        QML_FILES DetailDialog.qml
 )

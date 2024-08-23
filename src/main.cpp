@@ -7,8 +7,11 @@
 #include "app_environment.h"
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
-#include "backend/SignVerify.h"
 #include <QQmlContext>
+
+#include "backend/SignVerify.h"
+#include "backend/SQLiteDatabase.h"
+#include "backend/MessageData.h"
 
 int main(int argc, char *argv[])
 {
@@ -20,9 +23,9 @@ int main(int argc, char *argv[])
 
     SignVerify signVerify;
     engine.rootContext()->setContextProperty("SignVerify", &signVerify);
-
-
-
+    qmlRegisterType<MessageData>("Test_1", 1, 0, "MessageData");
+    SQLiteDatabase sqliteDb;
+    engine.rootContext()->setContextProperty("sqliteDb", &sqliteDb);
     const QUrl url(u"qrc:/qt/qml/Main/main.qml"_qs);
     QObject::connect(
         &engine,

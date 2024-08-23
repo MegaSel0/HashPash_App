@@ -7,9 +7,8 @@ project(HashPash LANGUAGES CXX)
 
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt6 6.2 REQUIRED COMPONENTS Core Gui Qml Quick)
+find_package(Qt6 6.2 REQUIRED COMPONENTS Core Gui Qml Quick Sql)
 find_package(OpenSSL REQUIRED)
-
 
 if (Qt6_VERSION VERSION_GREATER_EQUAL 6.3)
     qt_standard_project_setup()
@@ -18,6 +17,9 @@ endif()
 qt_add_executable(HashPash src/main.cpp
     backend/SignVerify.h
     backend/SignVerify.cpp
+    backend/SQLiteDatabase.h
+    backend/SQLiteDatabase.cpp
+    backend/MessageData.h
 )
 
 qt_add_resources(HashPash "configuration"
@@ -32,6 +34,7 @@ target_link_libraries(HashPash PRIVATE
     Qt6::Qml
     Qt6::Quick
     OpenSSL::Crypto
+    Qt6::Sql
 )
 
 if (BUILD_QDS_COMPONENTS)
@@ -42,7 +45,7 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/qmlmodules)
 
 if (LINK_INSIGHT)
     include(${CMAKE_CURRENT_SOURCE_DIR}/insight)
-endif ()
+endif()
 
 include(GNUInstallDirs)
 install(TARGETS HashPash
@@ -55,20 +58,28 @@ install(TARGETS HashPash
 set(QML_IMPORT_PATH ${PROJECT_BINARY_DIR}/qml CACHE PATH
     "Path to the custom QML components defined by the project")
 
+# ===== تنظیمات برای خروجی اندروید =====
 
-# # اضافه کردن CPack
-# include(CPack)
+# حداقل سطح پلتفرم اندروید
+set(ANDROID_PLATFORM android-21)
 
-# # تنظیمات CPack
-# set(CPACK_GENERATOR "DEB;RPM;TGZ") # انتخاب نوع بسته (DEB برای Debian/Ubuntu، RPM برای Red Hat/Fedora، TGZ برای فایل فشرده)
-# set(CPACK_PACKAGE_NAME "Test_3App")
-# set(CPACK_PACKAGE_VERSION "1.0.0")
-# set(CPACK_DEBIAN_PACKAGE_MAINTAINER "your-email@example.com")
-# set(CPACK_PACKAGE_DESCRIPTION "This is a description of Test_3App.")
-# set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Test_3App - a brief summary.")
-# set(CPACK_PACKAGE_VENDOR "Your Company")
-# set(CPACK_PACKAGE_CONTACT "contact@example.com")
+# نوع معماری اندروید (armeabi-v7a, arm64-v8a, x86, x86_64)
+set(ANDROID_ABI armeabi-v7a)
 
-# # تنظیمات اضافی (اختیاری)
-# set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt6core5a, libqt6gui6, libqt6quick6")
-# set(CPACK_RPM_PACKAGE_REQUIRES "libqt6core5a, libqt6gui6, libqt6quick6")
+# افزودن تنظیمات مخصوص اندروید
+if(ANDROID)
+    find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick AndroidExtras)
+
+    # تنظیمات ابزار NDK
+    set(CMAKE_ANDROID_NDK_TOOLCHAIN_VERSION clang)
+    set(CMAKE_SYSTEM_NAME Android)
+    set(CMAKE_SYSTEM_VERSION 28)  # نسخه پلتفرم اندروید
+    set(CMAKE_ANDROID_ARCH_ABI ${ANDROID_ABI})
+
+    # مسیر خروجی کتابخانه‌های JNI (اختیاری)
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/libs/${ANDROID_ABI})
+
+    # اضافه کردن تنظیمات و وابستگی‌های مخصوص اندروید در صورت نیاز
+endif()
+
+# ===== پایان تنظیمات اندروید =====

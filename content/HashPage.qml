@@ -13,8 +13,22 @@ HashPageForm {
             anchors.leftMargin: 5
             icon.source: "images/history.svg"
             onClicked: {
-                t_1.open()
+              historyDialog.visible = true
             }
         }
+
+        ToolButton {
+            id: lock
+            anchors.right: parent.right
+            anchors.rightMargin: 5
+            icon.source: "lock-open.svg"
+            onClicked: {
+              }
+        }
     }
+
+    HistoryDialog {
+        id: historyDialog
+    }
+
 }
