@@ -14,7 +14,15 @@ Item {
             horizontalCenter: parent.horizontalCenter
             topMargin: 60
         }
+
+        textInput{
+            id:privateKeyText
+        }
         placeholderText: qsTr("Private Key")
+        Connections {
+                target: encryptionDialog
+                onPrivateKeyUpdated: privateKeyText.text = newPrivateKey
+        }
     }
 
     CustomTextField {

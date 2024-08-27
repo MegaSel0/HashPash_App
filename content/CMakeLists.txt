@@ -18,9 +18,14 @@ qt6_add_qml_module(content
         images//lock.svg
         images/lock-open.svg
         images/copy.svg
+        images/encryption1.svg
+        images/encryption2.svg
+        images/encryption3.svg
+        images/encryption4.svg
         animation/ZZ6.gif
         QML_FILES HashPageContent.qml
         QML_FILES PashPageContent.qml
         QML_FILES HistoryDialog.qml
         QML_FILES DetailDialog.qml
+        QML_FILES EncryptionDialog.qml
 )

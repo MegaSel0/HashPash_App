@@ -11,7 +11,6 @@
 
 #include "backend/SignVerify.h"
 #include "backend/SQLiteDatabase.h"
-#include "backend/MessageData.h"
 #include "backend/ClipboardHelper.h"
 
 #include <QClipboard>
@@ -26,8 +25,9 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     SignVerify signVerify;
+    SQLiteDatabase database;
     engine.rootContext()->setContextProperty("SignVerify", &signVerify);
-    qmlRegisterType<MessageData>("Test_1", 1, 0, "MessageData");
+    engine.rootContext()->setContextProperty("database", &database);
     SQLiteDatabase sqliteDb;
     engine.rootContext()->setContextProperty("sqliteDb", &sqliteDb);
 

@@ -18,16 +18,24 @@ HashPageForm {
         }
 
         ToolButton {
-            id: lock
-            anchors.right: parent.right
-            anchors.rightMargin: 5
-            icon.source: "images/lock-open.svg"
-            onClicked: {
-              }
-        }
+                   id: encryption
+                   anchors.right: parent.right
+                   anchors.rightMargin: 5
+                   icon.source: "images/encryption4.svg"
+                   icon.color: "#ffffff"
+                   onClicked: {
+                       encryptionDialog.visible = true
+                   }
+               }
+           }
+
+
+
+
+
+    EncryptionDialog {
+        id: encryptionDialog
     }
-
-
 
     HistoryDialog {
         id: historyDialog

@@ -20,7 +20,10 @@ public:
 
 
     Q_INVOKABLE QVariantList fetchData() const;
-    Q_INVOKABLE bool deleteData(int id);  // اضافه کردن تابع deleteData
+    Q_INVOKABLE bool deleteData(int id);
+
+    Q_INVOKABLE bool saveKeys(const QString &publicKey, const QString &privateKey); // تابع جدید
+    Q_INVOKABLE QVariantMap getLastKeys() const;
 
 private:
     QSqlDatabase db;

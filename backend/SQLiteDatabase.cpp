@@ -55,6 +55,21 @@ bool SQLiteDatabase::createTable()
         return false;
     }
 
+    QString createTableQuery3 = R"(
+    CREATE TABLE IF NOT EXISTS keys (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        publicKey TEXT NOT NULL,
+        privateKey TEXT NOT NULL,
+        dateTime TEXT NOT NULL
+    )
+)";
+
+    if (!query.exec(createTableQuery3)) {
+        qDebug() << "Failed to create keys table:" << query.lastError();
+        return false;
+    }
+
+
     qDebug() << "Table created or already exists.";
     return true;
 }
@@ -144,4 +159,48 @@ bool SQLiteDatabase::deleteData(int id)
 
     qDebug() << "Data deleted successfully.";
     return true;
+}
+
+
+bool SQLiteDatabase::saveKeys(const QString &publicKey, const QString &privateKey) {
+    QSqlQuery query;
+
+    // پاک کردن کلیدهای قدیمی
+    if (!query.exec("DELETE FROM keys")) {
+        qDebug() << "Failed to delete old keys:" << query.lastError();
+        return false;
+    }
+
+    // ذخیره کلیدهای جدید
+    query.prepare(R"(
+        INSERT INTO keys (publicKey, privateKey, dateTime)
+        VALUES (:publicKey, :privateKey, :dateTime)
+    )");
+
+    query.bindValue(":publicKey", publicKey);
+    query.bindValue(":privateKey", privateKey);
+    query.bindValue(":dateTime", QDateTime::currentDateTime().toString(Qt::ISODate));
+
+    if (!query.exec()) {
+        qDebug() << "Failed to insert new keys:" << query.lastError();
+        return false;
+    }
+
+    qDebug() << "Keys saved successfully.";
+    return true;
+}
+
+
+QVariantMap SQLiteDatabase::getLastKeys() const {
+    QVariantMap keys;
+    QSqlQuery query("SELECT publicKey, privateKey FROM keys ORDER BY dateTime DESC LIMIT 1");
+
+    if (query.exec() && query.next()) {
+        keys["publicKey"] = query.value(0).toString();
+        keys["privateKey"] = query.value(1).toString();
+    } else {
+        qDebug() << "Failed to fetch keys:" << query.lastError();
+    }
+
+    return keys;
 }

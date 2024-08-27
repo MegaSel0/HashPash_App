@@ -12,6 +12,7 @@ public:
 
     Q_INVOKABLE QString encryptMessage(const QString &message, const QString &publicKey);
     Q_INVOKABLE QString decryptMessage(const QString &encryptedMessage, const QString &privateKey);
+    Q_INVOKABLE QVariantMap generateKeys();  // افزودن تابع جدید
 
 private:
     void logErrors();
