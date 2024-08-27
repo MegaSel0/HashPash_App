@@ -6,8 +6,8 @@ Dialog {
     id: historyDialog
     title: qsTr("History")
     modal: true
-    width: 600
-    height: 600
+    width: parent ? parent.width * 0.6 : 320
+    height: parent ? parent.height * 0.9 : 240
     visible: false
     anchors {
         centerIn: parent

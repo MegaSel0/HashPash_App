@@ -12,6 +12,10 @@
 #include "backend/SignVerify.h"
 #include "backend/SQLiteDatabase.h"
 #include "backend/MessageData.h"
+#include "backend/ClipboardHelper.h"
+
+#include <QClipboard>
+#include <QQmlContext>
 
 int main(int argc, char *argv[])
 {
@@ -26,6 +30,13 @@ int main(int argc, char *argv[])
     qmlRegisterType<MessageData>("Test_1", 1, 0, "MessageData");
     SQLiteDatabase sqliteDb;
     engine.rootContext()->setContextProperty("sqliteDb", &sqliteDb);
+
+
+    ClipboardHelper clipboardHelper;
+    engine.rootContext()->setContextProperty("clipboardHelper", &clipboardHelper);
+
+    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+
     const QUrl url(u"qrc:/qt/qml/Main/main.qml"_qs);
     QObject::connect(
         &engine,

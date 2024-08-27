@@ -1,14 +1,30 @@
 import QtQuick 6.2
 import QtQuick.Controls 6.2
+import Test_1
 
 Page {
     id: root
 
+    Rectangle {
+        id: background
+        color: "#333333"
+        anchors.fill: parent
+        z: -1
+    }
+
     width: parent.width
     height: parent.height
+
+    // مدیریت وضعیت انتخاب دکمه‌ها
+    property int selectedIndex: 0
+
     SwipeView {
         id: view
         anchors.fill: parent
+
+        onCurrentIndexChanged: {
+            selectedIndex = view.currentIndex
+        }
 
         Loader {
             id: firstPageLoader
@@ -34,35 +50,23 @@ Page {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         spacing: 10
-        width: parent.width
 
-
-
-        Button {
+        // دکمه HashPage
+        CustomJumpButton {
+            id: buttonHash
             text: "HashPage"
-            width: parent.width / 2
-            height: 50
-            background: Rectangle {
-                color: parent.pressed ? "#555555" : "steelBlue"
-                border.color: "transparent"
-                radius: 0
-            }
-            font.pixelSize: 18
-            onClicked: {
+            color: selectedIndex === 0 ? "#505860" : "#404048"  // تغییر رنگ بر اساس وضعیت انتخاب
+            buttonMouseArea.onClicked: {
                 view.currentIndex = 0
             }
         }
-        Button {
+
+        // دکمه PashPage
+        CustomJumpButton {
+            id: buttonPash
             text: "PashPage"
-            width: parent.width / 2
-            height: 50
-            background: Rectangle {
-                color: parent.pressed ? "#555555" : "steelBlue"
-                border.color: "transparent"
-                radius: 0
-            }
-            font.pixelSize: 18
-            onClicked: {
+            color: selectedIndex === 1 ? "#505860" : "#404048"  // تغییر رنگ بر اساس وضعیت انتخاب
+            buttonMouseArea.onClicked: {
                 view.currentIndex = 1
             }
         }

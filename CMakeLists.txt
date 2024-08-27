@@ -19,7 +19,8 @@ qt_add_executable(HashPash src/main.cpp
     backend/SignVerify.cpp
     backend/SQLiteDatabase.h
     backend/SQLiteDatabase.cpp
-    backend/MessageData.h
+
+    backend/ClipboardHelper.h
 )
 
 qt_add_resources(HashPash "configuration"

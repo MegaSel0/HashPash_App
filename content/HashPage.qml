@@ -21,11 +21,13 @@ HashPageForm {
             id: lock
             anchors.right: parent.right
             anchors.rightMargin: 5
-            icon.source: "lock-open.svg"
+            icon.source: "images/lock-open.svg"
             onClicked: {
               }
         }
     }
+
+
 
     HistoryDialog {
         id: historyDialog

@@ -1,11 +1,12 @@
 import QtQuick 6.2
 import QtQuick.Controls 6.2
+import Test_1
 
 Item {
     width: parent.width
     height: parent.height
 
-    TextField {
+    CustomTextField {
         id: privateKey
         width: parent.width - 40
         anchors {
@@ -16,7 +17,7 @@ Item {
         placeholderText: qsTr("Private Key")
     }
 
-    TextArea {
+    CustomTextField {
         id: hashCode
         width: parent.width - 40
         anchors {
@@ -27,21 +28,24 @@ Item {
         placeholderText: qsTr("Encrypted Message")
     }
 
-    TextArea {
+    CustomTextArea {
         id: messages
         width: parent.width - 50
         height: 250
-        readOnly: true
+
         anchors {
             top: hashCode.bottom
             horizontalCenter: parent.horizontalCenter
             topMargin: 30
         }
-        wrapMode: TextEdit.Wrap
+        textInput{
+            readOnly:true
+        }
+
         placeholderText: qsTr("Decrypted Message")
     }
 
-    Button {
+    CustomPressEffectButton {
         id: verifyTheMessage
         text: "Decrypt the message"
         anchors {
@@ -49,12 +53,14 @@ Item {
             horizontalCenter: parent.horizontalCenter
             topMargin: 15
         }
-        onClicked: {
-            var decryptedMessage = SignVerify.decryptMessage(hashCode.text, privateKey.text);
-            messages.text = decryptedMessage;
+        buttonMouseArea{
+            onClicked: {
+                var decryptedMessage = SignVerify.decryptMessage(hashCode.text, privateKey.text);
+                messages.text = decryptedMessage;
 
-            // ذخیره‌سازی اطلاعات دی‌هش در پایگاه داده
-            sqliteDb.insertDecryptionData(privateKey.text, decryptedMessage, hashCode.text);
+                // ذخیره‌سازی اطلاعات دی‌هش در پایگاه داده
+                sqliteDb.insertDecryptionData(privateKey.text, decryptedMessage, hashCode.text);
+            }
         }
     }
 

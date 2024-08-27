@@ -7,7 +7,7 @@ Rectangle {
     id: menuButton
     width: parent.width
     height: 48
-    color: "#4caf50"
+    color: "#292929"
     radius: 5
     property alias label: label
     Label {

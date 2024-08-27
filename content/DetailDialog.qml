@@ -6,8 +6,8 @@ Dialog {
     id: detailDialog
     title: qsTr("Details")
     modal: true
-    width: 600
-    height: 400
+    width: parent ? parent.width * 1.0 : 320
+    height: parent ? parent.height * 0.9 : 240
     anchors{
         centerIn: parent
     }

@@ -1,11 +1,12 @@
 import QtQuick 6.2
 import QtQuick.Controls 6.2
+import Test_1
 
 Item {
     width: parent.width
     height: parent.height
 
-    TextField {
+    CustomTextField {
         id: publicKey
         width: parent.width - 40
         anchors {
@@ -16,7 +17,7 @@ Item {
         placeholderText: qsTr("Public Key")
     }
 
-    TextArea {
+    CustomTextArea {
         id: messages
         width: parent.width - 50
         height: 250
@@ -25,11 +26,10 @@ Item {
             horizontalCenter: parent.horizontalCenter
             topMargin: 30
         }
-        wrapMode: TextEdit.Wrap
         placeholderText: qsTr("messages")
     }
 
-    Button {
+    CustomPressEffectButton {
         id: encryptTheMessage
         text: "Encrypt the message"
         anchors {
@@ -37,25 +37,47 @@ Item {
             horizontalCenter: parent.horizontalCenter
             topMargin: 15
         }
-        onClicked: {
-            var hash = SignVerify.encryptMessage(messages.text, publicKey.text)
-            hashOutput.text = hash
-            sqliteDb.insertData(publicKey.text, messages.text, hash)
+        buttonMouseArea {
+            onClicked: {
+                var hash = SignVerify.encryptMessage(messages.text, publicKey.text)
+                hashOutput.text = hash
+                sqliteDb.insertData(publicKey.text, messages.text, hash)
+            }
         }
     }
 
-
-
-
-    TextArea {
+    CustomTextField {
         id: hashOutput
         width: parent.width - 40
-        readOnly: true
+        textInput{
+            id:textInput
+            readOnly:true
+
+        }
+
         anchors {
             top: encryptTheMessage.bottom
             horizontalCenter: parent.horizontalCenter
             topMargin: 15
         }
         placeholderText: qsTr("Hash Code")
+
+        Item {
+            anchors.fill: parent
+
+            ToolButton {
+                id: copyButton
+                icon.source: "images/copy.svg"
+                icon.color: "#ffffff"
+                anchors {
+                    right: parent.right
+                    verticalCenter: parent.verticalCenter
+                }
+                onClicked: {
+                    clipboardHelper.copyText(textInput.text);
+                }
+            }
+
+        }
     }
 }

@@ -9,7 +9,7 @@ qt6_add_qml_module(content
     QML_FILES
         App.qml
         HashPage.qml
-        PashPageForm.ui.qml
+
         HashPageForm.ui.qml
         PashPage.qml
     RESOURCES
@@ -17,6 +17,8 @@ qt6_add_qml_module(content
         images/history.svg
         images//lock.svg
         images/lock-open.svg
+        images/copy.svg
+        animation/ZZ6.gif
         QML_FILES HashPageContent.qml
         QML_FILES PashPageContent.qml
         QML_FILES HistoryDialog.qml

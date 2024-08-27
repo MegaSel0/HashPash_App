@@ -17,4 +17,8 @@ qt6_add_qml_module(Test_1
         EventListModel.qml
         EventListSimulator.qml
         QML_FILES CustomMenuBar.qml
+        QML_FILES CustomTextField.qml
+        QML_FILES CustomTextArea.qml
+        QML_FILES CustomPressEffectButton.qml
+        QML_FILES CustomJumpButton.qml
 )
