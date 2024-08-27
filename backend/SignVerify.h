@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QVariantMap>
 
 class SignVerify : public QObject
 {
@@ -12,7 +13,11 @@ public:
 
     Q_INVOKABLE QString encryptMessage(const QString &message, const QString &publicKey);
     Q_INVOKABLE QString decryptMessage(const QString &encryptedMessage, const QString &privateKey);
-    Q_INVOKABLE QVariantMap generateKeys();  // افزودن تابع جدید
+    Q_INVOKABLE QVariantMap generateKeys();
+
+    // افزودن توابع جدید برای امضای دیجیتال و تأیید آن
+    Q_INVOKABLE QString signMessage(const QString &message, const QString &privateKey);
+    Q_INVOKABLE bool verifySignature(const QString &message, const QString &signature, const QString &publicKey);
 
 private:
     void logErrors();
