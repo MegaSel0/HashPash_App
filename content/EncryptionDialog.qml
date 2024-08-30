@@ -2,14 +2,12 @@ import QtQuick 6.2
 import QtQuick.Controls 6.2
 import Test_1
 
-Dialog {
+CustomDialog {
     id: encryptionDialog
-    title: "Generate Keys"
     width: parent ? parent.width * 0.6 : 320
     height: parent ? parent.height * 0.9 : 240
-    anchors {
-        centerIn: parent
-    }
+    anchors.centerIn: parent
+
     signal privateKeyUpdated(string newPrivateKey)
 
     Component.onCompleted: {
@@ -20,57 +18,73 @@ Dialog {
 
     Column {
         anchors.fill: parent
-        spacing: 20
-        padding: 20
+        padding: 10
 
+
+        Rectangle {
+            width: parent.width/1.1
+            height: 40
+            anchors{
+                horizontalCenter: parent.horizontalCenter
+            }
+
+            color: "#333333"
+            radius: 8
+
+            Text {
+                text: "Generate Keys"
+                font.bold: true
+                font.pointSize: 18
+                color: "#ffffff"
+                anchors{
+                    horizontalCenter: parent.horizontalCenter
+                    centerIn: parent
+
+                }
+            }
+        }
 
         CustomTextArea {
             id: publicKeyFieldTextArea
             width: parent.width - 50
             height: 150
-
             anchors {
                 horizontalCenter: parent.horizontalCenter
                 topMargin: 30
             }
-            textInput{
-                id:publicKeyField
-                readOnly:true
+            textInput {
+                id: publicKeyField
+                readOnly: true
             }
-
             placeholderText: qsTr("Public Key")
         }
-
 
         CustomTextArea {
             id: privateKeyFieldTextArea
             width: parent.width - 50
             height: 150
-
             anchors {
                 horizontalCenter: parent.horizontalCenter
                 topMargin: 30
             }
-            textInput{
-                id:privateKeyField
-                readOnly:true
+            textInput {
+                id: privateKeyField
+                readOnly: true
             }
-
             placeholderText: qsTr("Private Key")
 
             onTextChanged: {
-                        encryptionDialog.privateKeyUpdated(privateKeyField.text)
-                    }
+                encryptionDialog.privateKeyUpdated(privateKeyField.text)
+            }
         }
 
-
-        Button {
+        CustomJumpButton {
             text: "Generate Keys"
-            anchors{
+            anchors {
                 horizontalCenter: parent.horizontalCenter
+                topMargin: 50
             }
-
-            onClicked: {
+            buttonMouseArea.onClicked: {
                 var keys = SignVerify.generateKeys();
                 publicKeyField.text = keys.publicKey;
                 privateKeyField.text = keys.privateKey;

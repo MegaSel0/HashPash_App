@@ -51,7 +51,6 @@ ApplicationWindow {
             animatedImage.opacity = 1
         }
 
-        // صفحه اصلی که پس از انیمیشن نمایش داده می‌شود
         HashPage {
             id: mainContent
             visible: false  // Initially hidden and shown after the animation

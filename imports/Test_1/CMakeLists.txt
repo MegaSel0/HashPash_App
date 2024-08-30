@@ -21,4 +21,7 @@ qt6_add_qml_module(Test_1
         QML_FILES CustomTextArea.qml
         QML_FILES CustomPressEffectButton.qml
         QML_FILES CustomJumpButton.qml
+        QML_FILES CustomNotifInApp.qml
+        QML_FILES
+        QML_FILES CustomDialog.qml
 )

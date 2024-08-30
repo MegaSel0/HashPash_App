@@ -51,21 +51,21 @@ Page {
         anchors.bottom: parent.bottom
         spacing: 10
 
-        // دکمه HashPage
+
         CustomJumpButton {
             id: buttonHash
             text: "HashPage"
-            color: selectedIndex === 0 ? "#505860" : "#404048"  // تغییر رنگ بر اساس وضعیت انتخاب
+            color: selectedIndex === 0 ? "#505860" : "#404048"
             buttonMouseArea.onClicked: {
                 view.currentIndex = 0
             }
         }
 
-        // دکمه PashPage
+
         CustomJumpButton {
             id: buttonPash
             text: "PashPage"
-            color: selectedIndex === 1 ? "#505860" : "#404048"  // تغییر رنگ بر اساس وضعیت انتخاب
+            color: selectedIndex === 1 ? "#505860" : "#404048"
             buttonMouseArea.onClicked: {
                 view.currentIndex = 1
             }

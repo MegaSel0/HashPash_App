@@ -4,10 +4,8 @@ import QtQuick.Controls 6.2
 Rectangle {
     id: container
     width: parent.width - 40
-    // height: 50
     color: "#3d3d3d"
     radius: 10
-    // anchors.centerIn: parent
     border.color: textInput.focus ? "#cccccc" : "#1f1f1f"
     border.width: 1
 
@@ -39,7 +37,7 @@ Rectangle {
             horizontalAlignment: TextInput.AlignLeft
             wrapMode: TextEdit.Wrap
 
-
+            color: "#edede9"
 
 
             onTextChanged: {
@@ -85,7 +83,7 @@ Rectangle {
         Text {
             id: placeholderText
             text: "Placeholder"
-            color: "#aaaaaa"
+            color: "Gray"
             anchors {
                 verticalCenter: textInput.verticalCenter
                 left: textInput.left

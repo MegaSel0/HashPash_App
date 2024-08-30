@@ -22,10 +22,15 @@ qt6_add_qml_module(content
         images/encryption2.svg
         images/encryption3.svg
         images/encryption4.svg
+        images/close.svg
+        images/about2.svg
+        images/trash.svg
         animation/ZZ6.gif
         QML_FILES HashPageContent.qml
         QML_FILES PashPageContent.qml
         QML_FILES HistoryDialog.qml
         QML_FILES DetailDialog.qml
         QML_FILES EncryptionDialog.qml
+
+
 )

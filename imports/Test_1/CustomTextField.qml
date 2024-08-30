@@ -3,7 +3,6 @@ import QtQuick.Controls 6.2
 
 Rectangle {
     id: container
-    // width: parent.width - 40
     height: 50
     color: "#3d3d3d"
     radius: 10
@@ -18,6 +17,8 @@ Rectangle {
         id: textInput
         width: parent.width - 20
         height: parent.height
+        color: "#edede9"
+
         anchors {
             horizontalCenter: parent.horizontalCenter
             verticalCenter: parent.verticalCenter
@@ -46,7 +47,7 @@ Rectangle {
     Text {
         id: placeholderText
         text: "Placeholder"
-        color: "#aaaaaa"
+        color: "Gray"
         anchors {
             verticalCenter: textInput.verticalCenter
             left: textInput.left
