@@ -1,5 +1,8 @@
 #include "SQLiteDatabase.h"
-#include <QDebug>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QDateTime>
+#include <QVariant>
 
 SQLiteDatabase::SQLiteDatabase(QObject *parent) : QObject(parent)
 {
@@ -7,9 +10,8 @@ SQLiteDatabase::SQLiteDatabase(QObject *parent) : QObject(parent)
     db.setDatabaseName("messages.db");
 
     if (!db.open()) {
-        qDebug() << "Failed to open the database:" << db.lastError();
+        // حذف qDebug() خطا
     } else {
-        qDebug() << "Database opened successfully!";
         createTable();
     }
 }
@@ -34,9 +36,7 @@ bool SQLiteDatabase::createTable()
         )
     )";
 
-
     if (!query.exec(createTableQuery)) {
-        qDebug() << "Failed to create table:" << query.lastError();
         return false;
     }
 
@@ -51,7 +51,6 @@ bool SQLiteDatabase::createTable()
     )";
 
     if (!query.exec(createTableQuery2)) {
-        qDebug() << "Failed to create decryptions table:" << query.lastError();
         return false;
     }
 
@@ -65,12 +64,21 @@ bool SQLiteDatabase::createTable()
 )";
 
     if (!query.exec(createTableQuery3)) {
-        qDebug() << "Failed to create keys table:" << query.lastError();
         return false;
     }
 
+    QString createTableQuery4 = R"(
+        CREATE TABLE IF NOT EXISTS user_passwords (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            hashedPassword TEXT NOT NULL,
+            dateTime TEXT NOT NULL
+        )
+    )";
 
-    qDebug() << "Table created or already exists.";
+    if (!query.exec(createTableQuery4)) {
+        return false;
+    }
+
     return true;
 }
 
@@ -88,15 +96,11 @@ bool SQLiteDatabase::insertData(const QString &publicKey, const QString &message
     query.bindValue(":dateTime", QDateTime::currentDateTime().toString(Qt::ISODate));
 
     if (!query.exec()) {
-        qDebug() << "Failed to insert data:" << query.lastError();
         return false;
     }
 
-    qDebug() << "Data inserted successfully.";
     return true;
 }
-
-
 
 bool SQLiteDatabase::insertDecryptionData(const QString &privateKey, const QString &decryptedMessage, const QString &hash)
 {
@@ -112,11 +116,9 @@ bool SQLiteDatabase::insertDecryptionData(const QString &privateKey, const QStri
     query.bindValue(":dateTime", QDateTime::currentDateTime().toString(Qt::ISODate));
 
     if (!query.exec()) {
-        qDebug() << "Failed to insert decryption data:" << query.lastError();
         return false;
     }
 
-    qDebug() << "Decryption data inserted successfully.";
     return true;
 }
 
@@ -126,7 +128,6 @@ QVariantList SQLiteDatabase::fetchData() const
     QSqlQuery query("SELECT id, publicKey, message, hash, dateTime FROM messages ORDER BY dateTime DESC");
 
     if (!query.exec()) {
-        qDebug() << "Failed to fetch data:" << query.lastError();
         return result;
     }
 
@@ -140,7 +141,6 @@ QVariantList SQLiteDatabase::fetchData() const
         result.append(record);
     }
 
-    qDebug() << "Fetched data:" << result;
     return result;
 }
 
@@ -153,25 +153,21 @@ bool SQLiteDatabase::deleteData(int id)
     query.bindValue(":id", id);
 
     if (!query.exec()) {
-        qDebug() << "Failed to delete data:" << query.lastError();
         return false;
     }
 
-    qDebug() << "Data deleted successfully.";
     return true;
 }
-
 
 bool SQLiteDatabase::saveKeys(const QString &publicKey, const QString &privateKey) {
     QSqlQuery query;
 
-    // پاک کردن کلیدهای قدیمی
+
     if (!query.exec("DELETE FROM keys")) {
-        qDebug() << "Failed to delete old keys:" << query.lastError();
         return false;
     }
 
-    // ذخیره کلیدهای جدید
+
     query.prepare(R"(
         INSERT INTO keys (publicKey, privateKey, dateTime)
         VALUES (:publicKey, :privateKey, :dateTime)
@@ -182,14 +178,11 @@ bool SQLiteDatabase::saveKeys(const QString &publicKey, const QString &privateKe
     query.bindValue(":dateTime", QDateTime::currentDateTime().toString(Qt::ISODate));
 
     if (!query.exec()) {
-        qDebug() << "Failed to insert new keys:" << query.lastError();
         return false;
     }
 
-    qDebug() << "Keys saved successfully.";
     return true;
 }
-
 
 QVariantMap SQLiteDatabase::getLastKeys() const {
     QVariantMap keys;
@@ -198,9 +191,46 @@ QVariantMap SQLiteDatabase::getLastKeys() const {
     if (query.exec() && query.next()) {
         keys["publicKey"] = query.value(0).toString();
         keys["privateKey"] = query.value(1).toString();
-    } else {
-        qDebug() << "Failed to fetch keys:" << query.lastError();
     }
 
     return keys;
+}
+
+bool SQLiteDatabase::saveUserPassword(const QString &hashedPassword) {
+    QSqlQuery query;
+
+
+    if (!query.exec("DELETE FROM user_passwords")) {
+        return false;
+    }
+
+
+    query.prepare(R"(
+        INSERT INTO user_passwords (hashedPassword, dateTime)
+        VALUES (:hashedPassword, :dateTime)
+    )");
+
+    query.bindValue(":hashedPassword", hashedPassword);
+    query.bindValue(":dateTime", QDateTime::currentDateTime().toString(Qt::ISODate));
+
+    if (!query.exec()) {
+        return false;
+    }
+
+    return true;
+}
+
+QString SQLiteDatabase::getUserPassword() const {
+    QSqlQuery query;
+
+
+    query.prepare("SELECT hashedPassword FROM user_passwords ORDER BY dateTime DESC LIMIT 1");
+
+    if (query.exec()) {
+        if (query.next()) {
+            return query.value(0).toString();
+        }
+    }
+
+    return QString();
 }

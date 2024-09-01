@@ -11,7 +11,7 @@ Rectangle {
 
     property alias text: textInput.text
     property alias placeholderText: placeholderText.text
-    property alias textInput:textInput
+    property alias textInput: textInput
 
     TextInput {
         id: textInput
@@ -29,7 +29,6 @@ Rectangle {
         horizontalAlignment: TextInput.AlignLeft
 
         clip: true
-
 
         onTextChanged: {
             placeholderText.visible = text.length === 0
@@ -52,8 +51,12 @@ Rectangle {
             verticalCenter: textInput.verticalCenter
             left: textInput.left
             leftMargin: 12
+            right: textInput.right
+            rightMargin: 12
         }
         font.pixelSize: 16
         visible: textInput.text.length === 0
+        elide: Text.ElideRight
+        clip: true
     }
 }

@@ -17,13 +17,12 @@ public:
 
     Q_INVOKABLE bool insertData(const QString &publicKey, const QString &message, const QString &hash);
     Q_INVOKABLE bool insertDecryptionData(const QString &privateKey, const QString &decryptedMessage, const QString &hash);
-
-
     Q_INVOKABLE QVariantList fetchData() const;
     Q_INVOKABLE bool deleteData(int id);
-
-    Q_INVOKABLE bool saveKeys(const QString &publicKey, const QString &privateKey); // تابع جدید
+    Q_INVOKABLE bool saveKeys(const QString &publicKey, const QString &privateKey);
     Q_INVOKABLE QVariantMap getLastKeys() const;
+    Q_INVOKABLE bool saveUserPassword(const QString &hashedPassword);
+    Q_INVOKABLE QString getUserPassword() const;
 
 private:
     QSqlDatabase db;

@@ -60,7 +60,7 @@ Item {
 
     CustomPressEffectButton {
         id: verifyTheMessage
-        text: "Decrypt the message"
+        text: "Decrypt"
         anchors {
             top: messages.bottom
             horizontalCenter: parent.horizontalCenter

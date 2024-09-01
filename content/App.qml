@@ -16,13 +16,11 @@ ApplicationWindow {
 
     color:"Black"
 
-    // Container for the animated image and main content
     Item {
         id: container
         width: root.width
         height: root.height
 
-        // Animated image
         AnimatedImage {
             id: animatedImage
             source: "animation/ZZ6.gif"
@@ -40,23 +38,36 @@ ApplicationWindow {
             running: true
             repeat: false
             onTriggered: {
-                // Ensure animation is hidden after the timer
                 animatedImage.opacity = 0
-                mainContent.visible = true
+                if (passwordDb.getUserPassword() !== "") {
+                    loginPage.visible = true;
+                    animatedImage.visible = false
+                } else {
+                    mainContent.visible = true;
+                }
             }
         }
 
         Component.onCompleted: {
-            // Start the animation when the component is loaded
             animatedImage.opacity = 1
+        }
+
+        LoginUser {
+            id: loginPage
+            visible: false
+            anchors.fill: parent
+            onLoginSuccess: {
+                loginPage.visible = false;
+                mainContent.visible = true;
+            }
         }
 
         HashPage {
             id: mainContent
-            visible: false  // Initially hidden and shown after the animation
+            visible: false
             anchors.fill: parent
-
-
         }
     }
+
+
 }

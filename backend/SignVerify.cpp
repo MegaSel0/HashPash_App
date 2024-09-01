@@ -10,18 +10,17 @@
 #include <iostream>
 #include <QMap>
 #include <QVariant>
-#include <iomanip>  // برای std::setw و std::setfill
+#include <iomanip>
 
-// Constructor
+
 SignVerify::SignVerify(QObject *parent) : QObject(parent) {}
 
-// تابع برای گزارش خطاها
+
 void SignVerify::logErrors() {
-    // بهتر است خطاها در فایل لاگ ذخیره شوند تا اطلاعات حساس به کاربر نشان داده نشود
     ERR_print_errors_fp(stderr);
 }
 
-// رمزنگاری داده‌ها با کلید عمومی
+
 QString SignVerify::encryptMessage(const QString &message, const QString &publicKey) {
     QByteArray keyData = publicKey.toUtf8();
     BIO *bio = BIO_new_mem_buf(keyData.data(), -1);
@@ -58,8 +57,7 @@ QString SignVerify::encryptMessage(const QString &message, const QString &public
         return "";
     }
 
-    // Encrypting in chunks
-    size_t chunkSize = 245; // 2048-bit RSA with OAEP padding can handle 245 bytes of data
+    size_t chunkSize = 245;
     QByteArray messageBytes = message.toUtf8();
     size_t messageSize = messageBytes.size();
     std::vector<unsigned char> encryptedData;
@@ -95,7 +93,6 @@ QString SignVerify::encryptMessage(const QString &message, const QString &public
     return encryptedMessage.toBase64();
 }
 
-// رمزگشایی داده‌ها با کلید خصوصی
 QString SignVerify::decryptMessage(const QString &encryptedMessage, const QString &privateKey) {
     std::cerr << "Decrypting message..." << std::endl;
 
@@ -136,8 +133,8 @@ QString SignVerify::decryptMessage(const QString &encryptedMessage, const QStrin
 
     QByteArray encryptedBytes = QByteArray::fromBase64(encryptedMessage.toUtf8());
 
-    size_t rsaBlockSize = EVP_PKEY_size(evpPrivateKey); // اندازه بلاک RSA که برابر با طول کلید است
-    size_t maxChunkSize = rsaBlockSize; // اندازه حداکثر تکه قابل رمزگشایی
+    size_t rsaBlockSize = EVP_PKEY_size(evpPrivateKey);
+    size_t maxChunkSize = rsaBlockSize;
 
     std::vector<unsigned char> decryptedData;
 
@@ -168,7 +165,6 @@ QString SignVerify::decryptMessage(const QString &encryptedMessage, const QStrin
     return decryptedText;
 }
 
-// تولید کلیدهای RSA با طول 3072 بیت
 QVariantMap SignVerify::generateKeys() {
     std::cerr << "Generating RSA keys..." << std::endl;
 
@@ -186,7 +182,7 @@ QVariantMap SignVerify::generateKeys() {
         return QVariantMap();
     }
 
-    if (EVP_PKEY_CTX_set_rsa_keygen_bits(ctx, 3072) <= 0) {  // تغییر طول کلید به 3072 بیت
+    if (EVP_PKEY_CTX_set_rsa_keygen_bits(ctx, 3072) <= 0) {
         std::cerr << "Error setting key length" << std::endl;
         logErrors();
         EVP_PKEY_CTX_free(ctx);
@@ -228,7 +224,6 @@ QVariantMap SignVerify::generateKeys() {
     return keys;
 }
 
-// تابع امضای دیجیتال
 QString SignVerify::signMessage(const QString &message, const QString &privateKey) {
     QByteArray keyData = privateKey.toUtf8();
     BIO *bio = BIO_new_mem_buf(keyData.data(), -1);
@@ -290,7 +285,6 @@ QString SignVerify::signMessage(const QString &message, const QString &privateKe
     return signature.toBase64();
 }
 
-// تابع برای تایید امضا
 bool SignVerify::verifySignature(const QString &message, const QString &signature, const QString &publicKey) {
     QByteArray keyData = publicKey.toUtf8();
     BIO *bio = BIO_new_mem_buf(keyData.data(), -1);

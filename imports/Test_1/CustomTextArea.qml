@@ -12,6 +12,7 @@ Rectangle {
     property alias text: textInput.text
     property alias placeholderText: placeholderText.text
     property alias textInput: textInput
+
     Flickable {
         id: flickable
         width: parent.width - 20
@@ -22,7 +23,6 @@ Rectangle {
         interactive: true
         flickableDirection: Flickable.VerticalFlick
 
-
         ScrollBar.vertical: ScrollBar {
             policy: ScrollBar.AlwaysOff
         }
@@ -30,15 +30,14 @@ Rectangle {
         TextEdit {
             id: textInput
             width: flickable.width
-            height: implicitHeight
+            height: Math.max(implicitHeight, flickable.height)
             font.pixelSize: 16
             padding: 10
-            verticalAlignment: TextInput.AlignVCenter
+            verticalAlignment: TextInput.AlignTop
             horizontalAlignment: TextInput.AlignLeft
             wrapMode: TextEdit.Wrap
-
             color: "#edede9"
-
+            cursorVisible: true
 
             onTextChanged: {
                 placeholderText.visible = text.length === 0
@@ -58,7 +57,6 @@ Rectangle {
             }
 
             function updateScrollPosition() {
-
                 var lineHeight = textInput.font.pixelSize * 1.5;
                 var cursorY = textInput.cursorRectangle.y
                 var visibleHeight = flickable.height
@@ -71,7 +69,6 @@ Rectangle {
             }
         }
 
-
         Behavior on contentY {
             NumberAnimation {
                 duration: 200
@@ -79,19 +76,25 @@ Rectangle {
             }
         }
 
-
         Text {
             id: placeholderText
             text: "Placeholder"
             color: "Gray"
             anchors {
-                verticalCenter: textInput.verticalCenter
+                top: textInput.top
                 left: textInput.left
                 leftMargin: 12
+                topMargin: 10
             }
             font.pixelSize: 16
             visible: textInput.text.length === 0
         }
-    }
 
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                textInput.forceActiveFocus();
+            }
+        }
+    }
 }

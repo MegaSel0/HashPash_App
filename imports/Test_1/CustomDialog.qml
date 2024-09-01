@@ -33,19 +33,21 @@ Rectangle {
             }
         }
 
-        RowLayout {
+
+        Item {
+            width: customDialog.width
+            height: 40
             visible: customDialog.showCloseButton
-            spacing: 10
-            anchors {
-                bottom: parent.bottom
-                horizontalCenter: parent.horizontalCenter
-                margins: 8
-            }
 
             CustomJumpButton {
                 text: qsTr("Close")
                 color: "#ba181b"
                 width: customDialog.width / 1.5
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    bottom: parent.bottom
+                    bottomMargin: 20
+                }
 
                 buttonMouseArea.onClicked: customDialog.visible = false
             }
