@@ -31,6 +31,10 @@ int main(int argc, char *argv[])
     SQLiteDatabase sqliteDb;
     engine.rootContext()->setContextProperty("sqliteDb", &sqliteDb);
 
+    SQLiteDatabase passwordDb;
+    engine.rootContext()->setContextProperty("passwordDb", &passwordDb);
+
+
 
     ClipboardHelper clipboardHelper;
     engine.rootContext()->setContextProperty("clipboardHelper", &clipboardHelper);

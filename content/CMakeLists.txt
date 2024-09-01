@@ -25,12 +25,20 @@ qt6_add_qml_module(content
         images/close.svg
         images/about2.svg
         images/trash.svg
+        images/Settings.svg
+        images/background.png
+        images/back.svg
+        images/User.png
         animation/ZZ6.gif
         QML_FILES HashPageContent.qml
         QML_FILES PashPageContent.qml
         QML_FILES HistoryDialog.qml
         QML_FILES DetailDialog.qml
         QML_FILES EncryptionDialog.qml
+        QML_FILES SettingDialog.qml
+        QML_FILES SettingPassword.qml
+        QML_FILES LoginUser.qml
+        QML_FILES AboutPage.qml
 
 
 )

@@ -26,7 +26,7 @@ CustomDialog {
 
 
             Rectangle {
-                width: parent.width / 1.1
+                width: parent.width
                 height: 40
                 anchors{
                     horizontalCenter: parent.horizontalCenter
@@ -41,6 +41,18 @@ CustomDialog {
                     font.pointSize: 18
                     color: "#ffffff"
                     anchors.centerIn: parent
+                }
+
+                ToolButton{
+                    icon.source: "images/back.svg"
+                    icon.color: "#ffffff"
+                    anchors{
+                        left:parent.left
+                    }
+                    text: "back"
+                    onClicked: {
+                        detailDialog.visible = false
+                    }
                 }
             }
 
@@ -62,6 +74,7 @@ CustomDialog {
                         width: parent.width
                         wrapMode: Text.WordWrap
                         color: "#ffffff"
+                        padding: 5
                     }
 
                     TextArea {
@@ -90,6 +103,8 @@ CustomDialog {
                         width: parent.width
                         wrapMode: Text.WordWrap
                         color: "#ffffff"
+                        padding: 5
+
                     }
 
                     TextArea {
@@ -117,6 +132,8 @@ CustomDialog {
                         width: parent.width
                         wrapMode: Text.WordWrap
                         color: "#ffffff"
+                        padding: 5
+
                     }
 
                     TextArea {
@@ -144,6 +161,8 @@ CustomDialog {
                         width: parent.width
                         wrapMode: Text.WordWrap
                         color: "#ffffff"
+                        padding: 5
+
                     }
 
                     TextArea {
@@ -168,17 +187,5 @@ CustomDialog {
         }
     }
 
-    ToolButton {
-        icon.source: "images/close.svg"
-        icon.color: "Red"
-        width: 50
-        height: 50
-        anchors {
-            bottom: parent.bottom
-            horizontalCenter: parent.horizontalCenter
-        }
-        onClicked: {
-            detailDialog.visible = false
-        }
-    }
+
 }

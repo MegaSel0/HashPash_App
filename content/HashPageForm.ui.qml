@@ -15,7 +15,6 @@ Page {
     width: parent.width
     height: parent.height
 
-    // مدیریت وضعیت انتخاب دکمه‌ها
     property int selectedIndex: 0
 
     SwipeView {

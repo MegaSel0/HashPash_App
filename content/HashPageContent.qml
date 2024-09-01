@@ -20,6 +20,8 @@ Item {
 
         textInput {
             id: publicKeyText
+
+
         }
         placeholderText: qsTr("Public Key")
     }
@@ -43,7 +45,7 @@ Item {
 
     CustomPressEffectButton {
         id: encryptTheMessage
-        text: "Encrypt the message"
+        text: "Encrypt"
         anchors {
             top: messages.bottom
             horizontalCenter: parent.horizontalCenter
@@ -57,6 +59,9 @@ Item {
             NumberAnimation { target: parent; property: "x"; from: parent.x; to: parent.x + 10; duration: 50 }
             NumberAnimation { target: parent; property: "x"; from: parent.x + 10; to: parent.x - 10; duration: 50 }
             NumberAnimation { target: parent; property: "x"; from: parent.x - 10; to: parent.x; duration: 50 }
+            onStopped: {
+                parent.x = 0
+            }
         }
 
         buttonMouseArea {
@@ -71,6 +76,7 @@ Item {
                     var hash = SignVerify.encryptMessage(messages.text, publicKey.text)
                     hashOutput.text = hash
                     sqliteDb.insertData(publicKey.text, messages.text, hash)
+                    historyDialog.updateHistoryModel();
                 }
             }
         }
@@ -95,7 +101,6 @@ Item {
         Item {
             anchors.fill: parent
 
-            // Tooltip
             Rectangle {
                 id: tooltip
                 width: 150
@@ -104,7 +109,7 @@ Item {
                 radius: 5
                 opacity: 0.8
                 visible: false
-                z: 1 // Ensures that the tooltip is above the button
+                z: 1
 
                 Text {
                     id: tooltipText
@@ -114,7 +119,6 @@ Item {
                 }
             }
 
-            // ToolButton
             ToolButton {
                 id: copyButton
                 icon.source: "images/copy.svg"
@@ -129,9 +133,9 @@ Item {
                     tooltip.visible = true
                     hideTooltipTimer.start()
                 }
+                clip:true
             }
 
-            // Timer to hide the tooltip
             Timer {
                 id: hideTooltipTimer
                 interval: 1000
@@ -143,7 +147,6 @@ Item {
                 }
             }
 
-            // Separate MouseArea for handling hover and tooltip
             MouseArea {
                 id: hoverArea
                 anchors.fill: copyButton
@@ -165,7 +168,6 @@ Item {
                 }
 
                 onClicked: {
-                    // Ensure the click passes through to the ToolButton
                     copyButton.clicked()
                 }
             }

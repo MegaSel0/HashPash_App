@@ -20,12 +20,8 @@ CustomDialog {
             bottomMargin: 55
         }
 
-
         Text {
-            anchors{
-                horizontalCenter: parent.horizontalCenter
-            }
-
+            anchors.horizontalCenter: parent.horizontalCenter
             text: "History"
             font.bold: true
             font.pointSize: 18
@@ -33,6 +29,8 @@ CustomDialog {
             horizontalAlignment: Text.AlignHCenter
             width: parent.width
             padding: 10
+            anchors.leftMargin: 20
+            anchors.rightMargin: 20
         }
 
         ListView {
@@ -48,13 +46,16 @@ CustomDialog {
                 height: 120
 
                 Rectangle {
-                    width: parent.width
+                    width: parent.width/1.1
                     height: parent.height
                     radius: 8
                     color: "#3d3d3d"
                     border.color: "#bdbdbd"
                     border.width: 1
                     clip: true
+                    anchors{
+                        horizontalCenter:parent.horizontalCenter
+                    }
 
                     Row {
                         spacing: 8
@@ -64,23 +65,34 @@ CustomDialog {
 
                         Column {
                             width: historyListView.width * 0.6
+                            spacing: 5
+
                             Text {
                                 text: "Public Key"
                                 font.bold: true
                                 font.pointSize: 16
                                 color: "#ffffff"
+                                padding: 2
+                                anchors.leftMargin: 20
+                                anchors.rightMargin: 20
                             }
 
                             Text {
                                 text: publicKey.length > 40 ? publicKey.substring(0, 40) + "..." : publicKey
                                 font.pointSize: 14
                                 color: "#cccccc"
+                                padding: 2
+                                anchors.leftMargin: 20
+                                anchors.rightMargin: 20
                             }
 
                             Text {
                                 text: message.length > 20 ? message.substring(0, 20) + "..." : message
                                 font.pointSize: 14
                                 color: "#cccccc"
+                                padding: 2
+                                anchors.leftMargin: 20
+                                anchors.rightMargin: 20
                             }
                         }
 
@@ -93,6 +105,7 @@ CustomDialog {
                             ToolButton {
                                 id: detailsButton
                                 icon.source: "images/about2.svg"
+                                icon.color: "#ffffff"
                                 width: 30
                                 height: 30
                                 onClicked: {
@@ -109,6 +122,7 @@ CustomDialog {
                             ToolButton {
                                 id: deleteButton
                                 icon.source: "images/trash.svg"
+                                icon.color: "#ffffff"
                                 width: 30
                                 height: 30
                                 onClicked: {
@@ -140,14 +154,15 @@ CustomDialog {
         }
     }
 
-    Component.onCompleted: {
+    function updateHistoryModel() {
         historyModel.clear();
         const data = sqliteDb.fetchData();
-
         for (var i = 0; i < data.length; i++) {
             historyModel.append(data[i]);
         }
     }
+
+    Component.onCompleted: updateHistoryModel()
 
     DetailDialog {
         id: detailDialog
