@@ -7,3 +7,14 @@ Usage Guide: You can generate your public and private keys using the RSA algorit
 Note: The private key is used for decrypting the text and is automatically entered in the Pash section of the program. Never share your private key with anyone.
 
 We strive to develop security applications to fill the gap left by today's society, which often overlooks security.
+
+
+
+## Direct Download
+
+| OS       | Download Links                                                |
+|----------|---------------------------------------------------------------|
+
+| **Linux** | [![Download AppImage](https://img.shields.io/badge/Download-AppImage-yellow)](https://github.com/MegaSel0/HashPash_App/releases/download/v1.0.0/HashPash-v1.0.0.AppImage) |
+
+
