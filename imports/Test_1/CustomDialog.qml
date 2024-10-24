@@ -33,24 +33,24 @@ Rectangle {
             }
         }
 
+              RowLayout {
+                  width: customDialog.width
+                  height: 40
+                  visible: customDialog.showCloseButton
+                  Layout.alignment: Qt.AlignHCenter
+                  anchors{
+                      bottomMargin:10
+                  }
 
-        Item {
-            width: customDialog.width
-            height: 40
-            visible: customDialog.showCloseButton
+                  CustomJumpButton {
+                      text: qsTr("Close")
+                      color: "#ba181b"
+                      width: customDialog.width / 1.5
+                      Layout.alignment: Qt.AlignHCenter
 
-            CustomJumpButton {
-                text: qsTr("Close")
-                color: "#ba181b"
-                width: customDialog.width / 1.5
-                anchors {
-                    horizontalCenter: parent.horizontalCenter
-                    bottom: parent.bottom
-                    bottomMargin: 20
-                }
+                      buttonMouseArea.onClicked: customDialog.visible = false
+                  }
+              }
 
-                buttonMouseArea.onClicked: customDialog.visible = false
-            }
-        }
     }
 }

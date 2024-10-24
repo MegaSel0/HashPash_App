@@ -1,3 +1,4 @@
+
 import QtQuick 6.2
 import QtQuick.Controls 6.2
 import Test_1
@@ -84,10 +85,11 @@ Thank you for using this program."
         textInput {
             readOnly: true
 
-            text:"To contact us, please email: afsel443t@protonmail.com\n
-version: 1.0\n
+            text:"For contact, please email us at afsel443t@protonmail.com.\n
+version: 1.0.0\n
 From: zz6 "
             }
     }
     }
 }
+

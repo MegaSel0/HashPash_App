@@ -7,10 +7,9 @@
 SQLiteDatabase::SQLiteDatabase(QObject *parent) : QObject(parent)
 {
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("messages.db");
+    db.setDatabaseName("T,HashPash.db");
 
     if (!db.open()) {
-        // حذف qDebug() خطا
     } else {
         createTable();
     }

@@ -7,14 +7,15 @@ ApplicationWindow {
 
     width: 900
     height: 600
-    minimumHeight: 400
+    minimumHeight: 600
     maximumHeight: 600
-    minimumWidth: 400
+    minimumWidth: 900
     maximumWidth: 900
     visible: true
+    flags: Qt.Window | Qt.WindowTitleHint
     property var builtInStyles
 
-    color:"Black"
+    color: "Black"
 
     Item {
         id: container
@@ -68,6 +69,4 @@ ApplicationWindow {
             anchors.fill: parent
         }
     }
-
-
 }

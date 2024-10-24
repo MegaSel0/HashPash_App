@@ -29,7 +29,7 @@ Item {
     CustomTextArea {
         id: messages
         width: parent.width - 50
-        height: 250
+        height: 220
         anchors {
             top: publicKey.bottom
             horizontalCenter: parent.horizontalCenter

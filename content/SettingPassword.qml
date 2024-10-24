@@ -1,22 +1,59 @@
 import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts 6.2
-import Qt.labs.settings 1.0
 import Test_1
 
 CustomDialog {
-    id: settingPasswordDialog
-
-    width: parent ? parent.width * 0.6 : 320
-    height: parent ? parent.height * 0.9 : 240
+    id: settingDialog
+    width: parent.width
+    height: parent.height
     anchors.centerIn: parent
+    showCloseButton: false
 
 
-    Settings {
-        id: appSettings
-        property bool isPasswordSwitchChecked: false
-    }
 
+    Column {
+        anchors.fill: parent
+        // spacing: 5
+        Rectangle {
+            width: parent.width
+            height: 50
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+            }
+
+            color: "#333333"
+            radius: 8
+
+            Text {
+                text: "Set Password"
+                font.bold: true
+                font.pointSize: 18
+                color: "#ffffff"
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    centerIn: parent
+                }
+            }
+
+            ToolButton {
+                icon.source: "images/back.svg"
+                icon.color: "#ffffff"
+                anchors {
+                    left: parent.left
+                }
+                text: "back"
+                onClicked: {
+                    settingDialog.visible = false
+                }
+            }
+        }
+    ColumnLayout {
+          width: parent.width / 1.1
+          height: parent.height /7
+          anchors {
+              horizontalCenter: parent.horizontalCenter
+          }
     Rectangle {
         id: customSwitch
         width: 55
@@ -89,14 +126,14 @@ CustomDialog {
         }
     }
 
+    }
     ColumnLayout {
-        anchors.fill: parent
-        spacing: 10
-        anchors {
-            bottomMargin: 55
-            top: customSwitch.bottom
-            topMargin: 50
-        }
+          width: parent.width / 1.1
+          height: parent.height /5
+          spacing: 20
+          anchors {
+              horizontalCenter: parent.horizontalCenter
+          }
 
         CustomTextField {
             id: currentPassword
@@ -154,6 +191,7 @@ CustomDialog {
             text: "Save Password"
             anchors {
                 horizontalCenter: parent.horizontalCenter
+
             }
             enabled: passwordSwitch.checked
             color: passwordSwitch.checked ? "#404048" : "#757575"
@@ -204,7 +242,7 @@ CustomDialog {
             }
         }
     }
-
+}
     Rectangle {
         id: notification
         width: settingPasswordDialog.width

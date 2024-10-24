@@ -19,7 +19,7 @@ CustomDialog {
     Column {
         anchors.fill: parent
         padding: 10
-
+        spacing: 10
 
         Rectangle {
             width: parent.width/1.1
@@ -57,6 +57,80 @@ CustomDialog {
                 readOnly: true
             }
             placeholderText: qsTr("Public Key")
+            Item {
+                anchors.fill: parent
+
+                Rectangle {
+                    id: tooltip
+                    width: 80
+                    height: 35
+                    color: "#333333"
+                    radius: 5
+                    opacity: 0.8
+                    visible: false
+                    z: 1
+
+                    Text {
+
+                        id: tooltipText
+                        anchors.centerIn: parent
+                        color: "white"
+                        text: "Copy Code"
+                    }
+                }
+
+                ToolButton {
+                    id: copyButton
+                    icon.source: "images/copy.svg"
+                    icon.color: "#ffffff"
+                    anchors {
+                        right: parent.right
+                    }
+                    onClicked: {
+                        clipboardHelper.copyText(publicKeyField.text);
+                        tooltipText.text = "Copied!"
+                        tooltip.visible = true
+                        hideTooltipTimer.start()
+                    }
+                    clip:true
+                }
+
+                Timer {
+                    id: hideTooltipTimer
+                    interval: 1000
+                    running: false
+                    repeat: false
+                    onTriggered: {
+                        tooltipText.text = "Copy Code"
+                        tooltip.visible = false
+                    }
+                }
+
+                MouseArea {
+                    id: hoverArea
+                    anchors.fill: copyButton
+                    cursorShape: Qt.PointingHandCursor
+                    hoverEnabled: true
+
+                    onEntered: {
+                        if (!tooltip.visible && tooltipText.text !== "Copied!") {
+                            tooltip.visible = true
+                            tooltip.x = copyButton.x + copyButton.width / 2 - tooltip.width / 2
+                            tooltip.y = copyButton.y - tooltip.height - 5
+                        }
+                    }
+
+                    onExited: {
+                        if (tooltipText.text !== "Copied!") {
+                            tooltip.visible = false
+                        }
+                    }
+
+                    onClicked: {
+                        copyButton.clicked()
+                    }
+                }
+            }
         }
 
         CustomTextArea {
