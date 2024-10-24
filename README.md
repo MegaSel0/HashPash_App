@@ -10,12 +10,33 @@ We strive to develop security applications to fill the gap left by today's socie
 
 
 
+![1](https://github.com/user-attachments/assets/c5fe818d-829b-4749-b6aa-6377283e1f1b)
+
+
 ## Direct Download
 
 | OS       | Download Links                                                |
 |----------|---------------------------------------------------------------|
 
 | **Linux** | [![Download AppImage](https://img.shields.io/badge/Download-AppImage-yellow)](https://github.com/MegaSel0/HashPash_App/releases/download/v1.0.0/HashPash-v1.0.0.AppImage) |
+|           |                    |
 
 
-![background](https://github.com/user-attachments/assets/1ba9554f-3a39-41c3-936b-2fe0add93709)
+
+## Parts of the program's UI
+
+![2](https://github.com/user-attachments/assets/875d7478-8aa2-40db-af09-6eb1420ab796)
+----------------------------------------------------------------------------
+![3](https://github.com/user-attachments/assets/6bc3e89a-5e60-44b5-94f3-95fdf2779be4)
+----------------------------------------------------------------------------
+![4](https://github.com/user-attachments/assets/26f61760-5d4f-4f34-85cd-2b8a266e2c8a)
+----------------------------------------------------------------------------
+![5](https://github.com/user-attachments/assets/804f819f-843b-4185-989f-85d73c081229)
+----------------------------------------------------------------------------
+
+
+
+
+
+
+
