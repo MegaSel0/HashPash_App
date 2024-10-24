@@ -18,3 +18,4 @@ We strive to develop security applications to fill the gap left by today's socie
 | **Linux** | [![Download AppImage](https://img.shields.io/badge/Download-AppImage-yellow)](https://github.com/MegaSel0/HashPash_App/releases/download/v1.0.0/HashPash-v1.0.0.AppImage) |
 
 
+![background](https://github.com/user-attachments/assets/1ba9554f-3a39-41c3-936b-2fe0add93709)
