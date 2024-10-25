@@ -10,7 +10,6 @@ SQLiteDatabase::SQLiteDatabase(QObject *parent) : QObject(parent)
     db.setDatabaseName("T,HashPash.db");
 
     if (!db.open()) {
-        // حذف qDebug() خطا
     } else {
         createTable();
     }
