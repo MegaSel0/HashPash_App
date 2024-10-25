@@ -46,6 +46,7 @@ Page {
     }
 
     Row {
+        id:buttomSwipe
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         spacing: 10

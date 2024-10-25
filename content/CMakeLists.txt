@@ -29,6 +29,7 @@ qt6_add_qml_module(content
         images/background.png
         images/back.svg
         images/User.png
+        images/success.svg
         animation/ZZ6.gif
         QML_FILES HashPageContent.qml
         QML_FILES PashPageContent.qml
@@ -39,6 +40,10 @@ qt6_add_qml_module(content
         QML_FILES SettingPassword.qml
         QML_FILES LoginUser.qml
         QML_FILES AboutPage.qml
+        QML_FILES FileDialogCustom.qml
+        QML_FILES
+        QML_FILES SetSavePath.qml
+        QML_FILES LoadingPage.qml
 
 
 )

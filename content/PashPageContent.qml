@@ -1,5 +1,8 @@
+
 import QtQuick 6.2
 import QtQuick.Controls 6.2
+import QtQuick.Dialogs
+
 import Test_1
 
 Item {
@@ -38,13 +41,13 @@ Item {
             id:hashCodeText
         }
 
-        placeholderText: qsTr("Encrypted Message")
+        placeholderText: qsTr("Enter Hash Code")
     }
 
     CustomTextArea {
         id: messages
         width: parent.width - 50
-        height: 250
+        height: 100
 
         anchors {
             top: hashCode.bottom
@@ -59,12 +62,56 @@ Item {
     }
 
     CustomPressEffectButton {
-        id: verifyTheMessage
-        text: "Decrypt"
+        id: selectButton
+        text: "Select File"
+        width: 90
+        height:30
         anchors {
             top: messages.bottom
-            horizontalCenter: parent.horizontalCenter
             topMargin: 15
+            rightMargin:25
+            right:parent.right
+        }
+        property string selectedFilePath: ""
+
+        buttonMouseArea {
+            onClicked: {
+                var filePath = FolderSelector.selectFile();
+                if (filePath) {
+                    selectButton.selectedFilePath = filePath;
+                    console.log("Selected file: " + filePath);
+                    checkIcon.visible = true;
+                    selectButton.color="#52b788"
+
+                } else {
+                    console.log("No file selected");
+                }
+            }
+        }
+
+        Image {
+            id: checkIcon
+            width: 18
+            height: 18
+            source: "images/success.svg"
+            visible: false
+            anchors.right: selectButton.right
+            anchors.verticalCenter: selectButton.verticalCenter
+        }
+    }
+
+    CustomPressEffectButton {
+        id: verifyTheMessage
+        property string pathFileOutPut: ""
+
+        text: "Decrypt"
+
+        anchors {
+            top: messages.bottom
+
+            horizontalCenter: parent.horizontalCenter
+            topMargin: 50
+
         }
 
         SequentialAnimation {
@@ -82,7 +129,7 @@ Item {
 
 
 
-                if (notification.visible) {
+                if (notification.visible && (hashCodeText.text === "" || privateKeyText.text === "")) {
 
                     shakeAnimation.start()
                 } else {
@@ -92,17 +139,50 @@ Item {
 
 
                 sqliteDb.insertDecryptionData(privateKey.text, decryptedMessage, hashCode.text);
+
+
                 }
+                if(selectButton.selectedFilePath !== ""){
+                    loadingPage.visible = true;z
+                    customMenuBar.visible = false
+                    indicator.visible = false
+                    buttomSwipe.visible = false
+                    delayTimer.start()
+                }
+
             }
         }
     }
+
+    Timer {
+        id: delayTimer
+        interval: 1000 // 3 ثانیه
+        onTriggered: {
+            if (selectButton.selectedFilePath.length !== 0) {
+                var decryptfile = DecryptImage.decryptFinalImage(hashCode.text, privateKey.text ,selectButton.selectedFilePath);
+
+                var pathFile = DecryptImage.pathFile();
+                verifyTheMessage.pathFileOutPut = pathFile;
+
+                notification.show("Save in " + pathFile);
+
+            }
+            if(verifyTheMessage.pathFileOutPut !== ""){
+                loadingPage.visible = false;
+                customMenuBar.visible = true
+                indicator.visible = true
+                buttomSwipe.visible = true
+            }
+        }
+        }
+
 
 
     Rectangle {
         id: notification
         width: parent.width
         height: 50
-        color: "red"
+        color: verifyTheMessage.pathFileOutPut !== "" ? "green" : "red"
         radius: 5
         anchors {
             top: parent.top
@@ -162,10 +242,15 @@ Item {
                    !privateKeyText.text.includes("-----END PRIVATE KEY-----")) {
 
             notification.show("Public key syntax is not correct.")
+        }else if (verifyTheMessage.pathFileOutPut !== ""){
+            notification.show("Save in " + EncryptImage.pathFile())
         }
     }
 
+    LoadingPage{
+        id:loadingPage
+        visible: false
+    }
 
 }
-
 

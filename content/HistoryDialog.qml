@@ -17,7 +17,7 @@ CustomDialog {
         anchors.fill: parent
         spacing: 10
         anchors {
-            bottomMargin: 55
+            bottomMargin: 75
         }
 
         Text {
@@ -113,6 +113,7 @@ CustomDialog {
                                         publicKey: publicKey,
                                         message: message,
                                         hash: hash,
+                                        pathFile: pathFile,
                                         dateTime: dateTime
                                     };
                                     detailDialog.visible = true

@@ -15,7 +15,7 @@ public:
     explicit SQLiteDatabase(QObject *parent = nullptr);
     ~SQLiteDatabase();
 
-    Q_INVOKABLE bool insertData(const QString &publicKey, const QString &message, const QString &hash);
+    Q_INVOKABLE bool insertData(const QString &publicKey, const QString &message, const QString &hash , const QString &pathFile);
     Q_INVOKABLE bool insertDecryptionData(const QString &privateKey, const QString &decryptedMessage, const QString &hash);
     Q_INVOKABLE QVariantList fetchData() const;
     Q_INVOKABLE bool deleteData(int id);
@@ -23,6 +23,10 @@ public:
     Q_INVOKABLE QVariantMap getLastKeys() const;
     Q_INVOKABLE bool saveUserPassword(const QString &hashedPassword);
     Q_INVOKABLE QString getUserPassword() const;
+    Q_INVOKABLE bool insertHpedPath(const QString &hpedPath);
+    Q_INVOKABLE bool insertOutputPath(const QString &outputPath);
+    Q_INVOKABLE QString getHpedPath() const;
+    Q_INVOKABLE QString getOutputPath() const;
 
 private:
     QSqlDatabase db;

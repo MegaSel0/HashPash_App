@@ -5,7 +5,7 @@ import Test_1
 
 CustomDialog {
     id: detailDialog
-    backgroundColor: "#3d3d3d"
+    backgroundColor: "#333333"
     property var itemData: {}
     showCloseButton: false
     anchors.centerIn: parent
@@ -16,8 +16,8 @@ CustomDialog {
         width: parent.width
         height: parent.height / 1.1
         radius: 20
-        color: "#3d3d3d"
-        border.color: "#3d3d3d"
+        color: "#333333"
+        border.color: "#333333"
         border.width: 1
 
         ColumnLayout {
@@ -32,7 +32,7 @@ CustomDialog {
                     horizontalCenter: parent.horizontalCenter
                 }
 
-                color: "#3d3d3d"
+                color: "#333333"
                 radius: 20
 
                 Text {
@@ -60,7 +60,7 @@ CustomDialog {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-                ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+                // ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
                 ColumnLayout {
                     spacing: 10
@@ -76,16 +76,22 @@ CustomDialog {
                         color: "#ffffff"
                         padding: 5
                     }
+                    CustomTextArea {
+                        width: parent.width - 50
+                        height: 200
+                        color:"#3d3d3d"
+                        anchors {
+                            horizontalCenter: parent.horizontalCenter
+                            topMargin: 40
+                        }
+                        textInput {
+                            text: itemData ? itemData.publicKey : ""
+                            wrapMode: Text.WordWrap
+                            font.pointSize: 14
+                            color: "#cccccc"
+                            readOnly: true
+                        }
 
-                    TextArea {
-                        text: itemData ? itemData.publicKey : ""
-                        wrapMode: Text.WordWrap
-                        font.pointSize: 14
-                        color: "#cccccc"
-                        width: parent.width
-                        readOnly: true
-                        background: null
-                        padding: 0
                     }
 
 
@@ -95,6 +101,7 @@ CustomDialog {
                         color: "#757575"
                         opacity: 0.5
                     }
+
 
                     Text {
                         text: "Message:"
@@ -106,17 +113,26 @@ CustomDialog {
                         padding: 5
 
                     }
+                    CustomTextArea {
+                        width: parent.width - 50
+                        height: 80
+                        color:"#3d3d3d"
+                        placeholderText: ""
 
-                    TextArea {
-                        text: itemData ? itemData.message : ""
-                        wrapMode: Text.WordWrap
-                        font.pointSize: 14
-                        color: "#cccccc"
-                        width: parent.width
-                        readOnly: true
-                        background: null
-                        padding: 0
+                        anchors {
+                            horizontalCenter: parent.horizontalCenter
+                            topMargin: 40
+                        }
+                        textInput {
+
+                            text: itemData ? itemData.message : ""
+                            wrapMode: Text.WordWrap
+                            font.pointSize: 14
+                            color: "#cccccc"
+                            readOnly: true
+                        }
                     }
+
 
                     Rectangle {
                         width: parent.width
@@ -135,17 +151,60 @@ CustomDialog {
                         padding: 5
 
                     }
-
-                    TextArea {
-                        text: itemData ? itemData.hash : ""
-                        wrapMode: Text.WordWrap
-                        font.pointSize: 14
-                        color: "#cccccc"
-                        width: parent.width
-                        readOnly: true
-                        background: null
-                        padding: 0
+                    CustomTextArea {
+                        width: parent.width - 50
+                        height: 200
+                        color:"#3d3d3d"
+                        anchors {
+                            horizontalCenter: parent.horizontalCenter
+                            topMargin: 40
+                        }
+                        textInput {
+                            text: itemData ? itemData.hash : ""
+                            wrapMode: Text.WordWrap
+                            font.pointSize: 14
+                            color: "#cccccc"
+                            readOnly: true
+                        }
                     }
+
+
+                    Rectangle {
+                        width: parent.width
+                        height: 1
+                        color: "#757575"
+                        opacity: 0.5
+                    }
+
+                    Text {
+                        text: "pathFiles:"
+                        font.bold: true
+                        font.pointSize: 16
+                        width: parent.width
+                        wrapMode: Text.WordWrap
+                        color: "#ffffff"
+                        padding: 5
+
+                    }
+
+                    CustomTextArea {
+                        width: parent.width - 50
+                        height: 35
+                        color:"#3d3d3d"
+                        anchors {
+                            horizontalCenter: parent.horizontalCenter
+                            topMargin: 40
+                        }
+                        textInput {
+                            text: itemData ? itemData.pathFile : ""
+                            wrapMode: Text.WordWrap
+                            font.pointSize: 14
+                            color: "#cccccc"
+                            readOnly: true
+                        }
+                    }
+
+
 
                     Rectangle {
                         width: parent.width
@@ -164,17 +223,23 @@ CustomDialog {
                         padding: 5
 
                     }
-
-                    TextArea {
-                        text: itemData ? itemData.dateTime : ""
-                        wrapMode: Text.WordWrap
-                        font.pointSize: 14
-                        color: "#cccccc"
-                        width: parent.width
-                        readOnly: true
-                        background: null
-                        padding: 0
+                    CustomTextArea {
+                        width: parent.width - 50
+                        height: 35
+                        color:"#3d3d3d"
+                        anchors {
+                            horizontalCenter: parent.horizontalCenter
+                            topMargin: 40
+                        }
+                        textInput {
+                            text: itemData ? itemData.dateTime : ""
+                            wrapMode: Text.WordWrap
+                            font.pointSize: 14
+                            color: "#cccccc"
+                            readOnly: true
+                        }
                     }
+
 
                     Rectangle {
                         width: parent.width

@@ -9,7 +9,9 @@ set(CMAKE_AUTOMOC ON)
 
 find_package(Qt6 6.2 REQUIRED COMPONENTS Core Gui Qml Quick Sql)
 find_package(OpenSSL REQUIRED)
-
+find_package(ZLIB REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Concurrent)
 if (Qt6_VERSION VERSION_GREATER_EQUAL 6.3)
     qt_standard_project_setup()
 endif()
@@ -21,10 +23,15 @@ qt_add_executable(HashPash src/main.cpp
     backend/SQLiteDatabase.cpp
 
     backend/ClipboardHelper.h
+    backend/EncryptFile.h backend/EncryptFile.cpp
+    backend/DecryptFile.h backend/DecryptFile.cpp
+    backend/StandardTemplate.h backend/StandardTemplate.cpp
+    backend/FolderSelector.h
+
 )
 
 qt_add_resources(HashPash "configuration"
-    PREFIX "/"
+    # PREFIX "/"
     FILES
         qtquickcontrols2.conf
 )
@@ -36,6 +43,9 @@ target_link_libraries(HashPash PRIVATE
     Qt6::Quick
     OpenSSL::Crypto
     Qt6::Sql
+    ZLIB::ZLIB
+    Qt6::Concurrent
+    Qt6::Widgets
 )
 
 if (BUILD_QDS_COMPONENTS)

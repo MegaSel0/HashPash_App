@@ -131,7 +131,13 @@ QString SignVerify::decryptMessage(const QString &encryptedMessage, const QStrin
         return "";
     }
 
-    QByteArray encryptedBytes = QByteArray::fromBase64(encryptedMessage.toUtf8());
+    QString hashCode =encryptedMessage;
+    int position = hashCode.indexOf("---");
+    if (position != -1) {
+        hashCode = hashCode.left(position);
+    }
+
+    QByteArray encryptedBytes = QByteArray::fromBase64(hashCode.toUtf8());
 
     size_t rsaBlockSize = EVP_PKEY_size(evpPrivateKey);
     size_t maxChunkSize = rsaBlockSize;

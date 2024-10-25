@@ -1,12 +1,15 @@
+
 import QtQuick 6.2
 import QtQuick.Controls 6.2
+import QtQuick.Dialogs
 import Test_1
 
 Item {
+    id: root
     width: parent.width
     height: parent.height
-
-
+    property string selectedFilePath: ""
+    property string pathFileDatabase: ""
 
 
     CustomTextField {
@@ -29,7 +32,7 @@ Item {
     CustomTextArea {
         id: messages
         width: parent.width - 50
-        height: 250
+        height: 100
         anchors {
             top: publicKey.bottom
             horizontalCenter: parent.horizontalCenter
@@ -38,18 +41,63 @@ Item {
 
         textInput {
             id: messagesText
+            text: EncryptImage.imagePath
         }
 
         placeholderText: qsTr("messages")
     }
 
+
+    CustomPressEffectButton {
+        id: selectButton
+        text: "Select File"
+
+        width: 90
+        height: 30
+        anchors {
+            top: messages.bottom
+            topMargin: 15
+            rightMargin: 25
+            right: parent.right
+        }
+
+        property string selectedFilePath: ""
+
+        buttonMouseArea {
+            onClicked: {
+                var filePath = FolderSelector.selectFile();
+                if (filePath) {
+
+                    selectButton.selectedFilePath = filePath;
+                    console.log("Selected file: " + filePath);
+                    checkIcon.visible = true;
+                    selectButton.color="#52b788"
+                } else {
+                    console.log("No file selected");
+                }
+            }
+        }
+
+        Image {
+            id: checkIcon
+            width: 18
+            height: 18
+            source: "images/success.svg"
+            visible: false
+            anchors.right: selectButton.right
+            anchors.verticalCenter: selectButton.verticalCenter
+        }
+    }
+
     CustomPressEffectButton {
         id: encryptTheMessage
+        property string pathFileHped: ""
+
         text: "Encrypt"
         anchors {
             top: messages.bottom
             horizontalCenter: parent.horizontalCenter
-            topMargin: 15
+            topMargin: 50
         }
 
         SequentialAnimation {
@@ -66,23 +114,61 @@ Item {
 
         buttonMouseArea {
             onClicked: {
+                hashOutput.text = "";
+
                 handleSendButtonClicked()
 
-                if (notification.visible) {
-
+                if (notification.visible && (messagesText.text === "" || publicKeyText.text === "")) {
+                    // در صورت وجود ارور، لرزش را فعال کنید
                     shakeAnimation.start()
                 } else {
-
+                    // عملیات موفقیت‌آمیز بود، نوتیفیکیشن نمایش داده شود و صفحه نلرزد
                     var hash = SignVerify.encryptMessage(messages.text, publicKey.text)
+                    hash += "---"
                     hashOutput.text = hash
-                    sqliteDb.insertData(publicKey.text, messages.text, hash)
-                    historyDialog.updateHistoryModel();
+                    historyDialog.updateHistoryModel()
                 }
+                if(publicKeyText.text !== "" & selectButton.selectedFilePath !== "" ){
+                    loadingPage.visible = true;z
+                    customMenuBar.visible = false
+                    indicator.visible = false
+                    buttomSwipe.visible = false
+                    delayTimer.start()
             }
+
+
+
         }
-
-
     }
+    // تایمر برای صبر 3 ثانیه‌ای
+    Timer {
+        id: delayTimer
+        interval: 1000 // 3 ثانیه
+        onTriggered: {
+            if (selectButton.selectedFilePath.length !== 0) {
+                var hash2 = EncryptImage.encryptRSA(selectButton.selectedFilePath, publicKey.text);
+                encryptTheMessage.pathFileHped = hash2;
+                if (hashOutput.text.indexOf("---") === -1) {
+                    hashOutput.text += "---";
+                }
+
+                hashOutput.text += hash2;
+                var pathFile = EncryptImage.pathFile();
+                pathFileDatabase = pathFile
+                console.log("pathFile----------: " + pathFile);
+
+
+                notification.show("Save in " + pathFile);
+            }
+            sqliteDb.insertData(publicKey.text, messages.text, hash2 , selectButton.selectedFilePath)
+
+            historyDialog.updateHistoryModel();
+
+        }
+        }
+    }
+
+
 
     CustomTextField {
         id: hashOutput
@@ -98,6 +184,14 @@ Item {
             topMargin: 15
         }
         placeholderText: qsTr("Hash Code")
+        onTextChanged: {
+                if (hashOutput.text !== "") {
+                    loadingPage.visible = false;
+                    customMenuBar.visible = true
+                    indicator.visible = true
+                    buttomSwipe.visible = true
+                }
+            }
         Item {
             anchors.fill: parent
 
@@ -180,8 +274,7 @@ Item {
         id: notification
         width: parent.width
         height: 50
-        color: "red"
-        radius: 5
+        color: encryptTheMessage.pathFileHped !== "" ? "green" : "red"
         anchors {
             top: parent.top
             topMargin: 50
@@ -227,14 +320,25 @@ Item {
 
     function handleSendButtonClicked() {
         if (messagesText.text === "" && publicKeyText.text === "") {
-            notification.show("Public Key and messages cannot be empty.")
+            notification.show("Public Key and messages or Select File cannot be empty.")
         } else if (publicKeyText.text === "") {
             notification.show("Public Key cannot be empty.")
-        } else if (messagesText.text === "") {
-            notification.show("messages cannot be empty.")
+        } else if (messagesText.text === "" && selectButton.selectedFilePath.length === 0) {
+            notification.show("Messages or Select File cannot be empty.")
         } else if (!publicKeyText.text.includes("-----BEGIN PUBLIC KEY-----") ||
                    !publicKeyText.text.includes("-----END PUBLIC KEY-----")) {
             notification.show("Public key syntax is not correct.")
+        }else if (encryptTheMessage.pathFileHped !== ""){
+            notification.show("Save in " + EncryptImage.pathFile())
         }
+
+
     }
+
+    LoadingPage{
+        id:loadingPage
+        visible: false
+    }
+
 }
+

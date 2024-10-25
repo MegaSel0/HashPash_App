@@ -50,6 +50,18 @@ CustomDialog {
         }
 
         CustomPressEffectButton {
+            text: "Set Save Path"
+            anchors{
+                horizontalCenter: parent.horizontalCenter
+            }
+
+            width: settingDialog.width/1.2
+            buttonMouseArea.onClicked: {
+                setSavePath.visible = true
+            }
+        }
+
+        CustomPressEffectButton {
             text: "About"
             anchors{
                 horizontalCenter: parent.horizontalCenter
@@ -69,5 +81,8 @@ CustomDialog {
 
     SettingPassword {
         id: settingPasswordDialog
+    }
+    SetSavePath{
+        id:setSavePath
     }
 }

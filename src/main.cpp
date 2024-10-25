@@ -1,7 +1,7 @@
 // Copyright (C) 2021 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 
 #include "app_environment.h"
@@ -12,6 +12,9 @@
 #include "backend/SignVerify.h"
 #include "backend/SQLiteDatabase.h"
 #include "backend/ClipboardHelper.h"
+#include "backend/EncryptFile.h"
+#include "backend/DecryptFile.h"
+#include "backend/FolderSelector.h"
 
 #include <QClipboard>
 #include <QQmlContext>
@@ -20,9 +23,17 @@ int main(int argc, char *argv[])
 {
     set_qt_environment();
 
-    QGuiApplication app(argc, argv);
-
+    QApplication app(argc, argv);
     QQmlApplicationEngine engine;
+
+    FolderSelector folderSelector;
+    engine.rootContext()->setContextProperty("FolderSelector", &folderSelector);
+
+    EncryptFile encryptFile;
+    engine.rootContext()->setContextProperty("EncryptImage", &encryptFile);
+
+    DecryptFile decryptFile;
+    engine.rootContext()->setContextProperty("DecryptImage", &decryptFile);
 
     SignVerify signVerify;
     SQLiteDatabase database;

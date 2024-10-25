@@ -7,7 +7,7 @@
 SQLiteDatabase::SQLiteDatabase(QObject *parent) : QObject(parent)
 {
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("messages.db");
+    db.setDatabaseName("T,HashPash.db");
 
     if (!db.open()) {
         // حذف qDebug() خطا
@@ -32,6 +32,7 @@ bool SQLiteDatabase::createTable()
             publicKey TEXT NOT NULL,
             message TEXT NOT NULL,
             hash TEXT NOT NULL,
+            pathFile TEXT,
             dateTime TEXT NOT NULL
         )
     )";
@@ -48,7 +49,8 @@ bool SQLiteDatabase::createTable()
             hash TEXT NOT NULL,
             dateTime TEXT NOT NULL
         )
-    )";
+)";
+
 
     if (!query.exec(createTableQuery2)) {
         return false;
@@ -79,20 +81,35 @@ bool SQLiteDatabase::createTable()
         return false;
     }
 
+    QString createTableQuery5 = R"(
+        CREATE TABLE IF NOT EXISTS file_paths (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            hpedPath TEXT,
+            outputPath TEXT,
+            dateTime TEXT NOT NULL
+        )
+    )";
+
+    if (!query.exec(createTableQuery5)) {
+        return false;
+    }
+
     return true;
 }
 
-bool SQLiteDatabase::insertData(const QString &publicKey, const QString &message, const QString &hash)
+bool SQLiteDatabase::insertData(const QString &publicKey, const QString &message, const QString &hash , const QString &pathFile)
 {
+    qDebug() << "[DEBUG] pathFile----------------------------------------" << pathFile;
     QSqlQuery query;
     query.prepare(R"(
-        INSERT INTO messages (publicKey, message, hash, dateTime)
-        VALUES (:publicKey, :message, :hash, :dateTime)
+        INSERT INTO messages (publicKey, message, hash, pathFile , dateTime)
+        VALUES (:publicKey, :message, :hash,  :pathFile , :dateTime)
     )");
 
     query.bindValue(":publicKey", publicKey);
     query.bindValue(":message", message);
     query.bindValue(":hash", hash);
+    query.bindValue(":pathFile", pathFile);
     query.bindValue(":dateTime", QDateTime::currentDateTime().toString(Qt::ISODate));
 
     if (!query.exec()) {
@@ -102,11 +119,11 @@ bool SQLiteDatabase::insertData(const QString &publicKey, const QString &message
     return true;
 }
 
-bool SQLiteDatabase::insertDecryptionData(const QString &privateKey, const QString &decryptedMessage, const QString &hash)
+bool SQLiteDatabase::insertDecryptionData(const QString &privateKey, const QString &decryptedMessage, const QString &hash  )
 {
     QSqlQuery query;
     query.prepare(R"(
-        INSERT INTO decryptions (privateKey, decryptedMessage, hash, dateTime)
+        INSERT INTO decryptions (privateKey, decryptedMessage, hash,  dateTime)
         VALUES (:privateKey, :decryptedMessage, :hash, :dateTime)
     )");
 
@@ -125,7 +142,7 @@ bool SQLiteDatabase::insertDecryptionData(const QString &privateKey, const QStri
 QVariantList SQLiteDatabase::fetchData() const
 {
     QVariantList result;
-    QSqlQuery query("SELECT id, publicKey, message, hash, dateTime FROM messages ORDER BY dateTime DESC");
+    QSqlQuery query("SELECT id, publicKey, message, hash, pathFile,  dateTime FROM messages ORDER BY dateTime DESC");
 
     if (!query.exec()) {
         return result;
@@ -137,7 +154,8 @@ QVariantList SQLiteDatabase::fetchData() const
         record["publicKey"] = query.value(1).toString();
         record["message"] = query.value(2).toString();
         record["hash"] = query.value(3).toString();
-        record["dateTime"] = query.value(4).toString();
+        record["pathFile"] = query.value(4).toString();
+        record["dateTime"] = query.value(5).toString();
         result.append(record);
     }
 
@@ -233,4 +251,68 @@ QString SQLiteDatabase::getUserPassword() const {
     }
 
     return QString();
+}
+
+
+bool SQLiteDatabase::insertHpedPath(const QString &hpedPath)
+{
+    QSqlQuery query;
+    query.prepare(R"(
+        INSERT INTO file_paths (hpedPath, dateTime)
+        VALUES (:hpedPath, :dateTime)
+    )");
+
+    query.bindValue(":hpedPath", hpedPath);
+    query.bindValue(":dateTime", QDateTime::currentDateTime().toString(Qt::ISODate));
+
+    if (!query.exec()) {
+        qDebug() << "SQL Error:" << query.lastError().text();
+        return false;
+    }
+
+
+    return true;
+}
+
+
+bool SQLiteDatabase::insertOutputPath(const QString &outputPath)
+{
+    QSqlQuery query;
+    query.prepare(R"(
+        INSERT INTO file_paths (outputPath, dateTime)
+        VALUES (:outputPath, :dateTime)
+    )");
+
+    query.bindValue(":outputPath", outputPath);
+    query.bindValue(":dateTime", QDateTime::currentDateTime().toString(Qt::ISODate));
+
+    if (!query.exec()) {
+        qDebug() << "SQL Error:" << query.lastError().text();
+        return false;
+    }
+
+
+    return true;
+}
+
+QString SQLiteDatabase::getHpedPath() const {
+    QSqlQuery query;
+    query.prepare("SELECT hpedPath FROM file_paths WHERE hpedPath IS NOT NULL ORDER BY dateTime DESC LIMIT 1");
+
+    if (query.exec() && query.next()) {
+        return query.value(0).toString();
+    }
+
+    return QString(); // در صورتی که مسیری وجود نداشته باشد، رشته‌ی خالی برمی‌گرداند
+}
+
+QString SQLiteDatabase::getOutputPath() const {
+    QSqlQuery query;
+    query.prepare("SELECT outputPath FROM file_paths WHERE outputPath IS NOT NULL ORDER BY dateTime DESC LIMIT 1");
+
+    if (query.exec() && query.next()) {
+        return query.value(0).toString();
+    }
+
+    return QString(); // در صورتی که مسیری وجود نداشته باشد، رشته‌ی خالی برمی‌گرداند
 }
